@@ -1,13 +1,19 @@
-def permutation(letters: str, file):
+def permutation(letters: str):
     """Output all possible combination of the given letters to the given file"""
 
-    result = ""
-    # one way of constructing the string is by population the list as we move to each letter
-    for index, letter in enumerate(letters):
-        result += (letter + "\n") * _factorial(len(letters) - 1)
+    # base case:
+    if len(letters) == 1:
+        return [letters]
+    else:
+        result = []
+        for index, letter in enumerate(letters):
+            rest = letters[:index] + letters[index+1:]
+            rest_perm = permutation(rest)
+            for i in range(len(rest_perm)):
+                rest_perm[i] = letter + rest_perm[i]
+            result.extend(rest_perm)
 
-    with open(file, 'w') as f:
-        f.write(result)
+        return result
 
 
 def _factorial(num) -> int:
@@ -19,4 +25,7 @@ def _factorial(num) -> int:
     return result
 
 
-permutation("abcd", "./permutation.txt")
+result = permutation("abcd")
+
+for item in result:
+    print(item)
